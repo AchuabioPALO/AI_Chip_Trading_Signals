@@ -1,31 +1,70 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BacktestResults, formatCurrency, formatPercentage, tradingAPI } from '@/lib/api';
 
 interface Position {
 	symbol: string;
-	quantity: number;
-	avgPrice: number;
-	currentPrice: number;
+	shares: number;
+	entry_price: number;
+	current_price: number;
+	position_value: number;
 	pnl: number;
-	pnlPercent: number;
+	pnl_percent: number;
+	entry_date: string;
+	signal_info: {
+		type: string;
+		confidence: number;
+	};
 }
 
-// For demo purposes - in real implementation, this would come from your portfolio management system
-const mockPositions: Position[] = [
-	{ symbol: 'NVDA', quantity: 100, avgPrice: 890.00, currentPrice: 875.50, pnl: -1450, pnlPercent: -1.63 },
-	{ symbol: 'AMD', quantity: 200, avgPrice: 145.00, currentPrice: 142.25, pnl: -550, pnlPercent: -1.90 },
-	{ symbol: 'TSM', quantity: 150, avgPrice: 105.00, currentPrice: 108.75, pnl: 562, pnlPercent: 3.57 },
-];
+interface PortfolioData {
+	portfolio_performance: {
+		total_value: number;
+		total_pnl: number;
+		return_percentage: number;
+		cash_balance: number;
+	};
+	current_positions: Position[];
+	risk_metrics: any;
+	last_updated: string;
+}
 
 export const PositionTracker = () => {
+	const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(null);
 	const [backtestResults, setBacktestResults] = useState<BacktestResults | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+	const [refreshing, setRefreshing] = useState(false);
 
-	const totalPnl = mockPositions.reduce((sum, pos) => sum + pos.pnl, 0);
-	const totalValue = mockPositions.reduce((sum, pos) => sum + (pos.currentPrice * pos.quantity), 0);
+	// Fetch real portfolio data
+	const fetchPortfolioData = async () => {
+		setRefreshing(true);
+		try {
+			const response = await fetch('http://localhost:8000/api/portfolio');
+			if (!response.ok) {
+				throw new Error(`Portfolio API error: ${response.status}`);
+			}
+			const data = await response.json();
+			setPortfolioData(data);
+			setError(null);
+		} catch (err) {
+			console.error('Failed to fetch portfolio data:', err);
+			setError(err instanceof Error ? err.message : 'Failed to fetch portfolio data');
+		} finally {
+			setRefreshing(false);
+		}
+	};
+
+	// Initial load and periodic refresh
+	useEffect(() => {
+		fetchPortfolioData();
+		
+		// Refresh every 30 seconds
+		const interval = setInterval(fetchPortfolioData, 30000);
+		
+		return () => clearInterval(interval);
+	}, []);
 
 	const runBacktest = async () => {
 		setLoading(true);
@@ -42,25 +81,44 @@ export const PositionTracker = () => {
 
 	return (
 		<div className="bg-gray-800 rounded-lg p-6">
-			<h2 className="text-xl font-semibold mb-6 text-gray-100">
-				Portfolio Performance
-			</h2>
-			
-			{/* Portfolio Summary */}
-			<div className="bg-gray-900 rounded-lg p-4 mb-6 border border-gray-700">
-				<div className="flex justify-between items-center mb-2">
-					<span className="text-gray-400">Total Value</span>
-					<span className="text-xl font-bold text-white">
-						{formatCurrency(totalValue)}
-					</span>
-				</div>
-				<div className="flex justify-between items-center">
-					<span className="text-gray-400">Total P&L</span>
-					<span className={`text-xl font-bold ${totalPnl < 0 ? 'text-red-400' : 'text-green-400'}`}>
-						{totalPnl < 0 ? '-' : '+'}${Math.abs(totalPnl).toLocaleString()}
-					</span>
-				</div>
+			<div className="flex justify-between items-center mb-6">
+				<h2 className="text-xl font-semibold text-gray-100">
+					Portfolio Performance
+				</h2>
+				<button 
+					onClick={fetchPortfolioData}
+					disabled={refreshing}
+					className="px-3 py-1 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-600 rounded text-sm font-medium transition-colors flex items-center"
+				>
+					{refreshing ? (
+						<>
+							<div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white mr-1"></div>
+							Refreshing...
+						</>
+					) : (
+						'Refresh'
+					)}
+				</button>
 			</div>
+					{/* Portfolio Summary */}
+		<div className="bg-gray-900 rounded-lg p-4 mb-6 border border-gray-700">
+			<div className="flex justify-between items-center mb-2">
+				<span className="text-gray-400">Total Value</span>
+				<span className="text-xl font-bold text-white">
+					{portfolioData ? formatCurrency(portfolioData.portfolio_performance.total_value) : '--'}
+				</span>
+			</div>
+			<div className="flex justify-between items-center">
+				<span className="text-gray-400">Total P&L</span>
+				<span className={`text-xl font-bold ${portfolioData && portfolioData.portfolio_performance.total_pnl < 0 ? 'text-red-400' : 'text-green-400'}`}>
+					{portfolioData ? (
+						portfolioData.portfolio_performance.total_pnl < 0 ? 
+						`-$${Math.abs(portfolioData.portfolio_performance.total_pnl).toLocaleString()}` : 
+						`+$${portfolioData.portfolio_performance.total_pnl.toLocaleString()}`
+					) : '--'}
+				</span>
+			</div>
+		</div>
 
 			{/* Strategy Performance (Backtest Results) */}
 			{backtestResults && (
@@ -94,11 +152,11 @@ export const PositionTracker = () => {
 					</div>
 				</div>
 			)}
-
-			{/* Individual Positions */}
-			<div className="space-y-4">
-				<h3 className="text-lg font-semibold text-gray-200">Current Positions</h3>
-				{mockPositions.map((position) => (
+		{/* Individual Positions */}
+		<div className="space-y-4">
+			<h3 className="text-lg font-semibold text-gray-200">Current Positions</h3>
+			{portfolioData && portfolioData.current_positions.length > 0 ? (
+				portfolioData.current_positions.map((position) => (
 					<div 
 						key={position.symbol}
 						className="bg-gray-900 rounded-lg p-4 border border-gray-700"
@@ -109,12 +167,15 @@ export const PositionTracker = () => {
 									{position.symbol}
 								</div>
 								<div className="text-sm text-gray-400">
-									{position.quantity} shares @ {formatCurrency(position.avgPrice)}
+									{position.shares} shares
+								</div>
+								<div className="text-xs text-gray-500">
+									Entered: {position.entry_date}
 								</div>
 							</div>
 							<div className="text-right">
 								<div className="text-lg font-bold text-white">
-									{formatCurrency(position.currentPrice)}
+									{formatCurrency(position.current_price)}
 								</div>
 								<div className={`text-sm font-medium ${position.pnl < 0 ? 'text-red-400' : 'text-green-400'}`}>
 									{position.pnl < 0 ? '' : '+'}${position.pnl.toLocaleString()}
@@ -124,7 +185,7 @@ export const PositionTracker = () => {
 						
 						<div className="flex justify-between items-center">
 							<div className="text-sm text-gray-400">
-								P&L: {formatPercentage(position.pnlPercent / 100)}
+								P&L: {formatPercentage(position.pnl_percent / 100)}
 							</div>
 							<div className="flex space-x-2">
 								<button className="px-3 py-1 bg-green-600 hover:bg-green-500 rounded text-sm font-medium transition-colors">
@@ -135,9 +196,32 @@ export const PositionTracker = () => {
 								</button>
 							</div>
 						</div>
+						
+						{/* Price Details */}
+						<div className="mt-2 pt-2 border-t border-gray-700">
+							<div className="grid grid-cols-2 gap-4 text-xs text-gray-400">
+								<div>
+									<div>Entry Price:</div>
+									<div className="text-white font-medium">
+										{formatCurrency(position.entry_price)}
+									</div>
+								</div>
+								<div>
+									<div>Current Price:</div>
+									<div className="text-white font-medium">
+										{formatCurrency(position.current_price)}
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
-				))}
-			</div>
+				))
+			) : (
+				<div className="bg-gray-900 rounded-lg p-4 border border-gray-700 text-center text-gray-400">
+					{portfolioData ? 'No positions currently held' : 'Loading positions...'}
+				</div>
+			)}
+		</div>
 
 			{/* Analytics Actions */}
 			<div className="mt-6 space-y-2">
@@ -165,6 +249,20 @@ export const PositionTracker = () => {
 			{error && (
 				<div className="mt-4 p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
 					<div className="text-red-400 text-sm">Error: {error}</div>
+				</div>
+			)}
+
+			{/* Portfolio Status */}
+			{portfolioData && (
+				<div className="mt-4 p-3 bg-gray-900/50 border border-gray-700/50 rounded-lg">
+					<div className="text-xs text-gray-400 space-y-1">
+						<div>Last Updated: {new Date(portfolioData.last_updated).toLocaleString()}</div>
+						<div>Cash Balance: {formatCurrency(portfolioData.portfolio_performance.cash_balance)}</div>
+						<div>Return: {portfolioData.portfolio_performance.return_percentage.toFixed(2)}%</div>
+						{portfolioData.risk_metrics && (
+							<div>Risk Level: {portfolioData.risk_metrics.risk_regime}</div>
+						)}
+					</div>
 				</div>
 			)}
 

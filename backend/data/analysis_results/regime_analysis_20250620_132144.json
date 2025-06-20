@@ -1,0 +1,106 @@
+{
+  "regime_definitions": {
+    "covid_crash": {
+      "start": "2020-02-01",
+      "end": "2020-04-30",
+      "description": "COVID-19 Market Crash",
+      "characteristics": "High volatility, flight to quality, tech weakness"
+    },
+    "covid_recovery": {
+      "start": "2020-05-01",
+      "end": "2021-12-31",
+      "description": "COVID Recovery Rally",
+      "characteristics": "QE-driven rally, tech strength, low rates"
+    },
+    "rate_hike_cycle": {
+      "start": "2022-01-01",
+      "end": "2023-06-30",
+      "description": "Fed Rate Hiking Cycle",
+      "characteristics": "Rising rates, bond stress, growth concerns"
+    },
+    "ai_boom": {
+      "start": "2023-07-01",
+      "end": "2024-12-31",
+      "description": "AI and Chip Boom",
+      "characteristics": "AI hype, semiconductor strength, selective rally"
+    },
+    "current_period": {
+      "start": "2025-01-01",
+      "end": "2025-12-31",
+      "description": "Current Trading Period",
+      "characteristics": "Active signal generation period"
+    }
+  },
+  "regime_performance": {
+    "ai_boom": {
+      "total_signals": 41,
+      "win_rate": 0.926829268292683,
+      "avg_return": 7.709854674121893,
+      "total_pnl": 26584.501930475315,
+      "return_volatility": 6.614237690222026,
+      "best_signal": 20.654033784291574,
+      "worst_signal": -6.120953729810374,
+      "regime_info": {
+        "start": "2023-07-01",
+        "end": "2024-12-31",
+        "description": "AI and Chip Boom",
+        "characteristics": "AI hype, semiconductor strength, selective rally"
+      },
+      "signal_type_breakdown": {
+        "return_pct": {
+          "NOW": 8.89380554408668,
+          "SOON": 6.466706260658865
+        },
+        "win": {
+          "NOW": 0.9523809523809523,
+          "SOON": 0.9
+        }
+      },
+      "symbol_performance": {
+        "return_pct": {
+          "AMD": 6.300600955213914,
+          "INTC": 8.161181797153915,
+          "NVDA": 10.93274477382717,
+          "QCOM": 8.002536395142734,
+          "TSM": 7.29235935047161
+        },
+        "win": {
+          "AMD": 0.9,
+          "INTC": 1.0,
+          "NVDA": 1.0,
+          "QCOM": 1.0,
+          "TSM": 0.8181818181818182
+        }
+      }
+    }
+  },
+  "signal_generation_patterns": {
+    "ai_boom": {
+      "total_signals": 57,
+      "signals_per_month": 3.1666666666666665,
+      "signal_type_distribution": {
+        "NOW": 21,
+        "SOON": 20,
+        "WATCH": 16
+      },
+      "avg_confidence": 6.532011452951097,
+      "most_active_symbols": {
+        "TSM": 13,
+        "QCOM": 13,
+        "INTC": 12
+      }
+    }
+  },
+  "current_market_assessment": {
+    "current_regime": "current_period",
+    "regime_description": "Current Trading Period",
+    "regime_characteristics": "Active signal generation period",
+    "days_in_regime": 170,
+    "assessment_date": "2025-06-20T13:21:41.366501"
+  },
+  "total_signals_analyzed": 57,
+  "regimes_with_data": [
+    "ai_boom"
+  ],
+  "analysis_timestamp": "2025-06-20T13:21:41.370843"
+}

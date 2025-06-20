@@ -1,5 +1,5 @@
 ---
-mode: 'ask'
+mode: 'agent'
 ---
 
 ## AI Chip Market Forecasting Using Bond Market Signals
@@ -47,3 +47,4 @@ You are a quantitative analyst and trader specializing in cross-asset correlatio
 - Real-time dashboard showing bond→chip correlation signals
 - Investment strategy recommendations for AI semiconductor sector
 - Historical backtesting results and prediction accuracy analysis
+- task completion of the features in the docs/features folder
