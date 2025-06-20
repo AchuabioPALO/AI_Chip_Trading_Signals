@@ -13,7 +13,7 @@ import {
 	Filler
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { useBondStress } from '@/lib/api';
+import { useBondStress, tradingAPI } from '@/lib/api';
 
 ChartJS.register(
 	CategoryScale,
@@ -45,27 +45,12 @@ export const BondChart = () => {
 		const fetchHistoricalData = async () => {
 			setLoading(true);
 			try {
-				// Fetch REAL historical data from backend API
-				const response = await fetch(`http://localhost:8000/api/historical-bond-data?days=${timeframe}`);
-				if (response.ok) {
-					const realData = await response.json();
-					setHistoricalData(realData);
-				} else {
-					// Fallback: Generate single data point from current real data if API fails
-					if (currentBondStress) {
-						const singlePoint: HistoricalBondData = {
-							timestamp: new Date().toISOString(),
-							yield_curve_spread: currentBondStress.yield_curve_spread,
-							yield_curve_zscore: currentBondStress.yield_curve_zscore,
-							bond_volatility: currentBondStress.bond_volatility,
-							signal_strength: currentBondStress.signal_strength
-						};
-						setHistoricalData([singlePoint]);
-					}
-				}
+				// Fetch REAL historical data from backend API using TradingAPI
+				const realData = await tradingAPI.getHistoricalBondData(timeframe);
+				setHistoricalData(realData);
 			} catch (error) {
-				console.error('Error fetching historical bond data:', error);
-				// Use current real data as fallback instead of fake data
+				console.error('Failed to fetch historical data:', error);
+				// Fallback: Generate single data point from current real data if API fails
 				if (currentBondStress) {
 					const singlePoint: HistoricalBondData = {
 						timestamp: new Date().toISOString(),

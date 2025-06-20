@@ -20,7 +20,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from data_sources.fred_client import FredClient
 from data_sources.yahoo_client import YahooFinanceClient
-from signals.bond_stress_analyzer import BondStressAnalyzer, BondStressSignal
+from signals.bond_stress_analyzer import BondStressAnalyzer, BondStressSignal, SignalStrength
 from signals.correlation_engine import CorrelationEngine, ChipTradingSignal
 from models.ml_signal_engine import MLSignalEngine
 from models.backtest_engine import BacktestEngine
@@ -798,13 +798,13 @@ async def backfill_historical_data(days_back: int = 90):
 				# Determine signal strength based on max z-score
 				max_zscore = max(abs(yield_zscore), abs(volatility_zscore), abs(credit_zscore))
 				if max_zscore > 2.0:
-					signal_strength = "HIGH"
+					signal_strength = SignalStrength.NOW  # Use enum value
 					confidence = random.uniform(8.0, 10.0)
 				elif max_zscore > 1.0:
-					signal_strength = "MEDIUM"
+					signal_strength = SignalStrength.SOON  # Use enum value
 					confidence = random.uniform(5.0, 8.0)
 				else:
-					signal_strength = "LOW"
+					signal_strength = SignalStrength.WATCH  # Use enum value
 					confidence = random.uniform(2.0, 5.0)
 				
 				# Create historical signal directly
