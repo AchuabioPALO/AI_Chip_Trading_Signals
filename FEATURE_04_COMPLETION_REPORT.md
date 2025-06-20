@@ -240,6 +240,113 @@ Feature 04 successfully delivers a production-ready notification system that enh
 
 ---
 
+## ❓ FREQUENTLY ASKED QUESTIONS (FAQ)
+
+### **Q: Why Discord? Why not email or Slack for trading notifications?**
+**A:** Discord offers the best balance of features for trading alerts:
+- **Instant delivery:** Messages appear immediately on phone/desktop
+- **Rich formatting:** Embeds with colors, fields, and professional appearance  
+- **Free unlimited:** No message limits or subscription costs
+- **Mobile optimized:** Perfect for getting alerts while away from computer
+- **Easy setup:** Just create a webhook URL, no complex authentication
+- **Team-friendly:** Can easily add other traders to same channel
+
+### **Q: How do I set up Discord notifications? What if I don't use Discord?**
+**A:** Simple 3-step setup:
+1. **Create Discord server** (or use existing one)
+2. **Create webhook:** Server Settings → Integrations → Webhooks → New Webhook
+3. **Copy webhook URL** to your `.env` file as `DISCORD_WEBHOOK_URL`
+**Don't use Discord?** The system is designed to easily add other channels. Discord is just the most reliable starting point.
+
+### **Q: Will I get spammed with notifications? How do you prevent alert overload?**
+**A:** Multiple spam prevention layers:
+- **Rate limiting:** Maximum 12 messages per hour, 5-minute minimum between similar alerts
+- **Confidence filtering:** Only high-confidence signals (>7.0) trigger immediate alerts
+- **Priority batching:** Groups similar signals together, sends top 3 max
+- **Daily summaries:** End-of-day reports instead of constant pings
+- **User control:** JSON config file to enable/disable any notification type
+
+### **Q: What exactly will I get notified about? What triggers an alert?**
+**A:** Four types of notifications:
+1. **Bond Stress Alerts:** When bond market stress reaches critical levels (confidence >7.0)
+2. **AI Chip Signals:** High-confidence BUY/SELL recommendations (confidence >7.0)
+3. **Error Alerts:** System issues like API failures or data problems
+4. **Daily Summaries:** End-of-day portfolio and signal performance reports
+
+### **Q: How reliable are these notifications? What if I miss one?**
+**A:** Built for reliability:
+- **Retry logic:** Automatically retries failed Discord deliveries
+- **Error tracking:** System logs all delivery failures for debugging
+- **Graceful degradation:** System continues working even if Discord is down
+- **Dashboard backup:** All signals also visible in web dashboard
+- **Statistics tracking:** Monitor delivery success/failure rates
+
+### **Q: Can I customize what I get notified about? Turn off certain alerts?**
+**A:** Full customization via JSON config file:
+- **Per-alert-type control:** Enable/disable bond alerts, chip signals, errors, summaries
+- **Confidence thresholds:** Adjust minimum confidence for notifications
+- **Rate limiting:** Change frequency limits and spam protection
+- **Discord settings:** Control embeds, mentions, formatting
+- **Runtime changes:** Edit config file, changes apply immediately
+
+### **Q: What's the format of these notifications? Will they look professional?**
+**A:** Discord notifications use rich embeds with:
+- **Color coding:** 🚨 Red (NOW), ⚠️ Orange (SOON), 👀 Green (WATCH)
+- **Structured fields:** Symbol, action, confidence, price, position size
+- **Professional bot:** "AI Trading Bot" with custom avatar
+- **Timestamps:** All alerts include precise timing
+- **Clean formatting:** Easy to read on mobile and desktop
+
+### **Q: What happens during market hours vs after hours? Do I get alerts at night?**
+**A:** Smart timing features:
+- **Market-aware:** System knows when markets are open/closed
+- **Daily summaries:** Typically sent at market close (4 PM EST)
+- **After-hours signals:** Only critical alerts sent outside trading hours
+- **User control:** Can configure quiet hours in preferences
+- **Emergency override:** Critical system errors always get through
+
+### **Q: How secure is this? Can other people see my trading alerts?**
+**A:** Security focused design:
+- **Private Discord channels:** Only you see the alerts (unless you invite others)
+- **Webhook-only:** No Discord bot permissions, just posting messages
+- **Local processing:** All data stays on your system
+- **No sensitive data:** Alerts don't include account balances or personal info
+- **Environment variables:** Webhook URLs stored securely
+
+### **Q: What if Discord is down or I'm having connection issues?**
+**A:** Multiple fallback strategies:
+- **Automatic retries:** System tries multiple times to deliver messages
+- **Error logging:** Failed deliveries logged for later review
+- **Dashboard access:** All signals available via web interface
+- **Graceful degradation:** System keeps generating signals even if notifications fail
+- **Status monitoring:** Dashboard shows notification delivery health
+
+### **Q: Can I test this before using it for real trading?**
+**A:** Comprehensive testing available:
+- **Test notification endpoint:** Send sample alerts to verify Discord setup
+- **Configuration validation:** System checks webhook URL and settings
+- **Mock data mode:** Test with simulated signals before live trading
+- **Delivery confirmation:** System reports successful/failed message delivery
+- **Statistics dashboard:** Monitor notification performance over time
+
+### **Q: How does this integrate with the rest of the trading system?**
+**A:** Seamlessly integrated:
+- **Backend integration:** Notifications trigger automatically from signal generation
+- **Dashboard sync:** Web interface shows notification history and status  
+- **API endpoints:** Manual notification triggers available via REST API
+- **Error monitoring:** System automatically alerts on technical issues
+- **Performance tracking:** Notification stats included in daily summaries
+
+### **Q: What's next? How do notifications connect to trading execution?**
+**A:** Foundation for advanced features:
+- **Current:** Get alerted about signals
+- **Future:** Direct broker integration for automated execution
+- **Enhancement:** SMS alerts for critical signals
+- **Expansion:** Multiple Discord channels for different signal types
+- **Integration:** Connect to paper trading platforms for validation
+
+---
+
 **Next Phase:** Feature 05 - Historical Analysis & Backtesting Dashboard
 
 *Report generated: June 20, 2025*

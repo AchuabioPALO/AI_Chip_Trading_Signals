@@ -189,6 +189,112 @@ Feature 3 provides the foundation for:
 
 ---
 
+## ❓ FREQUENTLY ASKED QUESTIONS (FAQ)
+
+### **Q: What exactly is this dashboard? What can I see and do with it?**
+**A:** This is a professional trading interface that shows you everything about your AI chip trading system in real-time. Think of it like a "mission control" for your trading strategy. You can:
+- **Monitor bond market stress** with interactive charts (yield curves, volatility)
+- **View AI chip trading signals** with BUY/SELL recommendations and confidence scores
+- **Track performance** with portfolio value, returns, and risk metrics
+- **Control the system** with quick actions to refresh data or run backtests
+
+### **Q: How is this different from just looking at Yahoo Finance or TradingView?**
+**A:** This dashboard is specifically designed for your quantitative strategy:
+- **Custom indicators:** Shows bond stress metrics you won't find elsewhere
+- **Integrated signals:** Displays your AI chip recommendations, not generic analysis
+- **Correlation views:** Shows how bond markets connect to your AI chip positions
+- **Risk management:** Built-in position sizing and portfolio limits
+- **Real-time updates:** Fresh data every 5 minutes from your backend system
+
+### **Q: Do I need to be a trader to understand this interface?**
+**A:** No! It's designed to be intuitive:
+- **Color coding:** Green = good, Red = warning, Yellow = caution
+- **Simple language:** "BUY NVDA" instead of complex technical jargon
+- **Visual charts:** Easy-to-read line graphs and bar charts
+- **Clear metrics:** Confidence scores (1-10), percentage returns, dollar amounts
+- **Tooltips:** Hover over any element for explanations
+
+### **Q: Is this secure? Can other people see my trading information?**
+**A:** Very secure, everything runs locally:
+- **Local-only:** Runs on your computer (localhost:3000)
+- **No cloud data:** Everything stays on your machine
+- **No personal info:** Only shows market data and signals, no account details
+- **Private network:** Only accessible from your computer unless you specifically configure otherwise
+
+### **Q: Can I use this on my phone or tablet?**
+**A:** Yes, it's fully mobile-responsive:
+- **Responsive design:** Automatically adjusts to any screen size
+- **Touch-friendly:** Large buttons and tap targets for mobile use
+- **PWA capable:** Can be "installed" on your phone like a native app
+- **Fast loading:** Optimized for mobile networks
+- **Same features:** Full functionality available on mobile
+
+### **Q: How real-time is "real-time"? How fresh is the data?**
+**A:** Very current data:
+- **5-minute updates:** Backend refreshes market data every 5 minutes
+- **Live clock:** Shows current time and market status (open/closed)
+- **Automatic refresh:** Dashboard pulls new data without manual reload
+- **Status indicators:** Shows when data was last updated
+- **Market hours aware:** Adapts behavior based on trading session
+
+### **Q: What if I don't understand the charts? How do I read them?**
+**A:** Charts are designed to be intuitive:
+- **Bond Stress Chart:** Higher lines = more market stress = potential AI chip opportunities
+- **Performance Chart:** Shows your portfolio value over time (like a bank account balance)
+- **Signal History:** Timeline of your BUY/SELL decisions with outcomes
+- **Timeframe controls:** Switch between 7 days, 30 days, or 60 days view
+- **Hover details:** Point at any data point to see exact values and explanations
+
+### **Q: Can I customize this dashboard? Add my own charts or features?**
+**A:** Built for extensibility:
+- **Component-based:** Easy to add new charts or panels
+- **API-driven:** All data comes from standardized backend endpoints
+- **Theme support:** Dark theme built-in, can add more themes
+- **Chart library:** Uses Chart.js - industry standard with tons of options
+- **Modular design:** Add new features without breaking existing ones
+
+### **Q: What happens if the dashboard crashes or stops working?**
+**A:** Multiple recovery options:
+- **Auto-recovery:** Browser automatically retries failed data requests
+- **Error boundaries:** Isolated failures don't crash entire dashboard
+- **Fallback data:** Shows last known values if new data unavailable
+- **Manual refresh:** Simple browser reload fixes most issues
+- **Backend independence:** Dashboard can run even if backend has issues
+
+### **Q: How do I know if the system is making or losing money?**
+**A:** Built-in performance tracking:
+- **Portfolio Value:** Real-time total value of your positions
+- **Daily Returns:** Green/red bars showing daily profit/loss
+- **Performance Metrics:** Sharpe ratio, max drawdown, win rate
+- **Signal History:** Track record of each BUY/SELL recommendation
+- **Benchmark Comparison:** How you're doing vs just buying and holding
+
+### **Q: Can I control the trading system from this dashboard?**
+**A:** Yes, with safety controls:
+- **Quick Actions:** Refresh data, run backtests, send test notifications
+- **Signal Controls:** Enable/disable trading signals
+- **Position Monitoring:** View current holdings and exposure
+- **Risk Limits:** See and adjust position sizing rules
+- **Emergency Stop:** Can pause entire system if needed
+
+### **Q: What's the performance like? Does it slow down my computer?**
+**A:** Highly optimized:
+- **Lightweight:** Next.js 15 with efficient React rendering
+- **Smart updates:** Only refreshes changed data, not entire page
+- **Chart optimization:** Chart.js configured for smooth animations
+- **Memory efficient:** Automatically cleans up old data
+- **Minimal CPU:** Uses modern web technologies for efficiency
+
+### **Q: How does this connect to the notification system and alerts?**
+**A:** Fully integrated:
+- **Signal alerts:** When dashboard shows new signals, Discord gets notified
+- **Dashboard controls:** Can send test notifications from quick actions
+- **Status sync:** Dashboard shows notification delivery status
+- **Alert history:** View past Discord/email alerts in the interface
+- **Preference management:** Control notification settings from dashboard
+
+---
+
 **Completion Status:** ✅ COMPLETE  
 **Quality Assurance:** ✅ TESTED  
 **Documentation:** ✅ COMPREHENSIVE  

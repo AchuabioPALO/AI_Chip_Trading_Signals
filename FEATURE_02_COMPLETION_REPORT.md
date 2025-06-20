@@ -170,4 +170,99 @@ The signal generation engine leverages the robust bond market monitoring infrast
 
 ---
 
+## ❓ FREQUENTLY ASKED QUESTIONS (FAQ)
+
+### **Q: What exactly are "AI chip trading signals"? What do they tell me?**
+**A:** These are specific BUY/SELL/HOLD recommendations for AI semiconductor stocks (NVDA, AMD, TSM, INTC, QCOM). Think of it like a smart assistant that watches the bond market stress from Feature 01 and tells you: "Based on bond market patterns, NVDA is likely to go up/down in the next 20-40 days, so you should BUY with 2% of your portfolio." Each signal includes confidence level (1-10), entry price, and position size.
+
+### **Q: How does this make money? What's the trading strategy?**
+**A:** The core insight is **cross-asset correlation**:
+1. **Bond markets stress first** (institutions get nervous)
+2. **They sell tech stocks** (including AI chips) to buy "safe" bonds
+3. **We detect this pattern early** using Feature 01's bond monitoring
+4. **We predict the reversal** when bond stress peaks and money flows back to tech
+5. **We generate signals** to buy AI chips during the dip or sell before the crash
+
+### **Q: What's the difference between NOW/SOON/WATCH signals?**
+**A:** These indicate urgency and timing:
+- **NOW** (Red 🚨): High confidence, act immediately (>7.5 confidence score)
+- **SOON** (Orange ⚠️): Medium confidence, prepare to act (5-7.5 confidence)
+- **WATCH** (Green 👀): Early warning, monitor closely (3-5 confidence)
+- **NEUTRAL** (Gray 😐): No clear signal, hold current positions
+
+### **Q: How accurate is the machine learning? Can I trust these predictions?**
+**A:** Our ML model is conservative and validated:
+- **Training data:** 2020-2024 historical bond/stock correlation patterns
+- **Walk-forward testing:** Prevents overfitting by testing on unseen future data
+- **Confidence scoring:** Only high-confidence signals (>7.0) trigger real alerts
+- **Risk management:** Position sizing limits losses even when wrong
+- **Correlation monitoring:** System warns when historical patterns break down
+
+### **Q: What's the risk management? How much money could I lose?**
+**A:** Multiple safety layers built in:
+- **Position limits:** Maximum 3% per stock, 20% total AI chip exposure
+- **VIX-based sizing:** Lower positions during high volatility (VIX >30 = 0.5% max)
+- **Stop-loss integration:** Every signal includes recommended exit price
+- **Kelly Criterion:** Mathematical position sizing based on win rate and average returns
+- **Correlation warnings:** Alerts if bond-chip relationships change
+
+### **Q: How often do signals get generated? Am I going to be overwhelmed?**
+**A:** Designed to be manageable:
+- **5-10 signals per week** during normal market conditions
+- **Rate limiting:** Maximum 3 signals per notification to prevent spam
+- **High-confidence filtering:** Only actionable signals reach you
+- **Daily summaries:** End-of-day reports instead of constant alerts
+- **20-60 day horizons:** Not day-trading, these are swing trade signals
+
+### **Q: What AI chip stocks does this cover? Can we add more?**
+**A:** Currently covers the major AI semiconductor players:
+- **NVDA** (NVIDIA) - GPU leader
+- **AMD** (Advanced Micro Devices) - CPU/GPU competitor  
+- **TSM** (Taiwan Semiconductor) - Chip manufacturer
+- **INTC** (Intel) - Traditional CPU leader
+- **QCOM** (Qualcomm) - Mobile/AI chips
+**Adding more:** System is designed to easily add new symbols by updating the ticker list.
+
+### **Q: How do I know if the system is making good predictions?**
+**A:** Built-in performance tracking:
+- **Signal performance database:** Tracks every prediction vs actual outcome
+- **Win rate monitoring:** Percentage of profitable signals
+- **Sharpe ratio calculation:** Risk-adjusted returns measurement
+- **Drawdown tracking:** Maximum portfolio decline monitoring
+- **Backtesting reports:** Historical "what if" analysis available via API
+
+### **Q: What happens during market crashes or unusual events?**
+**A:** System includes regime detection and adaptability:
+- **VIX monitoring:** Automatically reduces position sizes during high volatility
+- **Correlation breakdown alerts:** Warns when historical patterns stop working
+- **Anomaly detection:** ML model identifies unusual market conditions
+- **Emergency stops:** Can disable trading signals during extreme events
+- **Manual override:** All signals can be paused via configuration
+
+### **Q: How is this different from just buying and holding NVDA?**
+**A:** Several key advantages:
+- **Timing:** Enter/exit at better prices using bond market early warnings
+- **Diversification:** Spread risk across multiple AI chip stocks
+- **Risk management:** Position sizing prevents large losses
+- **Correlation insights:** Understand when AI chips move together vs independently
+- **Professional tools:** Same techniques used by quantitative hedge funds
+
+### **Q: Can I backtest this strategy? How do I validate it works?**
+**A:** Comprehensive backtesting available:
+- **API endpoint:** `/api/run-backtest` for historical analysis
+- **Custom date ranges:** Test any period from 2020-2024
+- **Performance metrics:** Sharpe ratio, max drawdown, win rate, total return
+- **Comparison benchmarks:** Results vs buying and holding
+- **Walk-forward validation:** Tests on truly unseen future data
+
+### **Q: What's the next step? How does this connect to the dashboard?**
+**A:** This integrates with Feature 03 (Dashboard):
+- **Real-time display:** All signals show up in the Next.js dashboard
+- **Interactive charts:** Visualize bond stress vs chip stock movements
+- **Performance tracking:** See your signal history and P&L
+- **Manual controls:** Enable/disable signals, adjust position sizes
+- **Mobile access:** Trade signals available on phone/tablet
+
+---
+
 *Completed by quantitative trading team on June 19, 2025 - Building on Feature 01 foundation*
