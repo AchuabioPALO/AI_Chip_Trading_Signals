@@ -188,7 +188,36 @@ async def update_market_data():
 				   f"Sent {len(high_priority_chips)} high-priority alerts")
 		
 	except Exception as e:
-		logger.error(f"Error updating market data: {e}")
+		error_message = f"Error updating market data: {e}"
+		logger.error(error_message)
+		
+		# Send error alert via Discord
+		try:
+			await notification_system.send_error_alert(error_message, "DATA_UPDATE_ERROR")
+		except Exception as alert_error:
+			logger.error(f"Failed to send error alert: {alert_error}")
+
+async def send_daily_summary_task():
+	"""Send daily summary at market close (4 PM EST)"""
+	global latest_bond_signal, latest_chip_signals
+	
+	try:
+		if latest_bond_signal and latest_chip_signals:
+			# Get basic portfolio stats (demo data for now)
+			portfolio_value = 100000.0  # Demo value
+			daily_pnl = None  # Would calculate from actual positions
+			
+			await notification_system.send_daily_summary(
+				latest_bond_signal, 
+				latest_chip_signals, 
+				portfolio_value, 
+				daily_pnl
+			)
+			logger.info("Daily summary sent successfully")
+		else:
+			logger.warning("No signals available for daily summary")
+	except Exception as e:
+		logger.error(f"Error sending daily summary: {e}")
 
 async def update_market_data_loop():
 	"""Background task to update market data every 5 minutes"""
@@ -463,17 +492,60 @@ async def run_backtest(
 
 @app.post("/api/send-test-notification")
 async def send_test_notification():
-	"""Send test notification to all configured channels"""
+	"""Test Discord notification system"""
 	try:
-		results = notification_system.test_notifications()
+		# Test Discord notification
+		result = notification_system.test_notifications()
+		
 		return {
-			"notification_test_results": results,
-			"channels_tested": len(results),
-			"successful_channels": sum(results.values()),
+			"message": "Notification test completed",
+			"results": result,
+			"discord_configured": bool(notification_system.discord_webhook),
+			"successful_channels": sum(result.values()),
 			"timestamp": datetime.now()
 		}
 	except Exception as e:
 		raise HTTPException(status_code=500, detail=f"Notification test error: {e}")
+
+@app.post("/api/send-daily-summary")
+async def trigger_daily_summary():
+	"""Manually trigger daily summary notification"""
+	try:
+		await send_daily_summary_task()
+		return {
+			"message": "Daily summary sent successfully",
+			"timestamp": datetime.now()
+		}
+	except Exception as e:
+		raise HTTPException(status_code=500, detail=f"Daily summary error: {e}")
+
+@app.get("/api/notification-stats")
+async def get_notification_stats():
+	"""Get notification system statistics"""
+	try:
+		stats = notification_system.get_notification_stats()
+		return {
+			"notification_stats": stats,
+			"discord_configured": bool(notification_system.discord_webhook),
+			"timestamp": datetime.now()
+		}
+	except Exception as e:
+		raise HTTPException(status_code=500, detail=f"Notification stats error: {e}")
+
+@app.post("/api/send-error-alert")
+async def send_test_error_alert():
+	"""Send test error alert"""
+	try:
+		await notification_system.send_error_alert(
+			"This is a test error alert from the API endpoint", 
+			"TEST_ERROR"
+		)
+		return {
+			"message": "Test error alert sent successfully",
+			"timestamp": datetime.now()
+		}
+	except Exception as e:
+		raise HTTPException(status_code=500, detail=f"Error alert test failed: {e}")
 
 @app.get("/api/performance-analytics")
 async def get_performance_analytics():

@@ -23,7 +23,7 @@
 **Market Stress** - Periods when investors are worried and selling assets rapidly. Like a financial panic where everyone heads for the exits at once.
 
 **Flight to Quality** - When scared investors dump risky assets (stocks) and buy safe ones (Treasury bonds). It's like running to your mom's house during a storm.
-
+    
 ### **Trading & Signal Generation**
 
 **Trading Signal** - A recommendation to buy, sell, or hold an investment based on data analysis. Like a traffic light for traders: green = buy, red = sell, yellow = wait.
@@ -133,6 +133,24 @@
 **Confidence Interval** - A range of values that likely contains the true answer. "We're 95% confident the win rate is between 60-70%."
 
 **Anomaly Detection** - Using AI to spot unusual patterns that might indicate trading opportunities or market stress.
+
+### **Notification & Alert Systems**
+
+**Webhook** - A way for one application to send real-time data to another application when something happens. Like a doorbell that automatically rings when someone arrives.
+
+**Discord Bot** - An automated program that can send messages and embeds to Discord channels. Think of it as a helpful robot assistant that reports trading updates.
+
+**Rate Limiting** - Controlling how many messages can be sent in a certain time period to prevent spam. Like a speed limit for notifications.
+
+**Rich Embeds** - Formatted messages with colors, fields, and graphics instead of plain text. Makes notifications look professional and easy to read.
+
+**Error Alert** - Automatic notification sent when something goes wrong with the trading system. Like a smoke alarm for your trading bot.
+
+**Daily Summary** - End-of-day report showing trading performance, signals generated, and portfolio status. Your trading report card.
+
+**Message Queue** - A waiting line for notifications to prevent overwhelming the system. Like a ticket system at the DMV but for alerts.
+
+**Configuration Management** - Storing user preferences and settings in files that can be easily changed. Like having a settings menu for your notifications.
 
 ---
 
