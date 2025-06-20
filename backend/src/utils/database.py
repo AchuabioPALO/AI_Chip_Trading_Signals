@@ -116,7 +116,7 @@ class DatabaseManager:
 					 credit_spreads, signal_strength, confidence_score, suggested_action)
 					VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 				""", (
-					signal.timestamp,
+					signal.timestamp.strftime('%Y-%m-%d %H:%M:%S') if hasattr(signal.timestamp, 'strftime') else str(signal.timestamp),
 					signal.yield_curve_spread,
 					signal.yield_curve_zscore,
 					signal.bond_volatility,
@@ -144,7 +144,7 @@ class DatabaseManager:
 					 entry_price, stop_loss, take_profit, reasoning)
 					VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 				""", (
-					signal.timestamp,
+					signal.timestamp.strftime('%Y-%m-%d %H:%M:%S') if hasattr(signal.timestamp, 'strftime') else str(signal.timestamp),
 					signal.symbol,
 					signal.signal_type,
 					signal.signal_strength.value,

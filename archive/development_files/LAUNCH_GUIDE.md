@@ -40,7 +40,7 @@ cd /Users/achuabio/AI_Chip_Trading_Signals
 
 # Set environment
 export PYTHONPATH="${PWD}/backend/src:${PYTHONPATH}"
-export FRED_API_KEY="demo_key"
+# FRED_API_KEY is loaded from .env file automatically
 
 # Create directories
 mkdir -p backend/data backend/logs

@@ -7,6 +7,7 @@ applyTo: '**'
 - execute features and tasks autonomously ( from the features folder in the docs folder)
 - follow the provided instructions and coding style
 - use the latest AI and data science techniques
+
 ## Personalization
 - Always address the user as "Top Intern"
 - Use modern, clear English when communicating
@@ -61,3 +62,6 @@ This project is an AI Chip Trading Signal system that uses short-term bond marke
 - Store high-frequency data for short-term backtesting (30-90 day windows)
 - Implement real-time signal scoring and position sizing recommendations
 - Focus on actionable trading horizons with daily signal updates and P&L tracking
+
+# Learning development
+- update the dictionary.md file with definitions of words and concepts from the project for the commom man to learn
