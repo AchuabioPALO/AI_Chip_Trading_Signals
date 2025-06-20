@@ -11,7 +11,7 @@ class YahooFinanceClient:
 	def __init__(self):
 		self.logger = logging.getLogger(__name__)
 		
-	def get_bond_etf_data(self, symbols: List[str] = None, period: str = "1y") -> Dict[str, pd.DataFrame]:
+	def get_bond_etf_data(self, symbols: List[str] = None, period: str = "2y") -> Dict[str, pd.DataFrame]:
 		"""Fetch bond ETF data for stress monitoring"""
 		if symbols is None:
 			symbols = ['TLT', 'IEF', 'SHY', 'HYG', 'LQD']  # Long, intermediate, short, high yield, investment grade
@@ -39,7 +39,7 @@ class YahooFinanceClient:
 				
 		return bond_data
 	
-	def get_ai_chip_stocks(self, symbols: List[str] = None, period: str = "1y") -> Dict[str, pd.DataFrame]:
+	def get_ai_chip_stocks(self, symbols: List[str] = None, period: str = "2y") -> Dict[str, pd.DataFrame]:
 		"""Fetch AI chip stock data"""
 		if symbols is None:
 			symbols = ['NVDA', 'AMD', 'TSM', 'INTC', 'QCOM']

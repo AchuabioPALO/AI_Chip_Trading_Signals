@@ -5,6 +5,7 @@ import { PositionTracker } from '@/components/PositionTracker';
 import { BondStressIndicators } from '@/components/BondStressIndicators';
 import { BondChart } from '@/components/BondChart';
 import { PerformanceChart } from '@/components/PerformanceChart';
+import { SignalDrillDown } from '@/components/SignalDrillDown';
 import { useState, useEffect } from 'react';
 
 export default function TradingDashboard() {
@@ -121,11 +122,16 @@ export default function TradingDashboard() {
 				</div>
 
 				{/* Bottom Row - Bond Stress Indicators (Full Width) */}
-				<div className="grid grid-cols-1 gap-8">
+				<div className="grid grid-cols-1 gap-8 mb-8">
 					{/* Bond Stress Indicators - Full width */}
 					<div>
 						<BondStressIndicators />
 					</div>
+				</div>
+
+				{/* Signal Deep Dive */}
+				<div className="mb-8">
+					<SignalDrillDown />
 				</div>
 			</main>
 

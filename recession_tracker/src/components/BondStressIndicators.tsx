@@ -50,11 +50,14 @@ const getOverallStressColor = (signalStrength: string) => {
 export const BondStressIndicators = () => {
 	const { data: bondStress, loading, error } = useBondStress();
 
-	// Create indicators from API data
+	// Create indicators from API data - USE REAL BACKEND Z-SCORES
 	const createIndicators = (data: BondStressData | null): BondIndicator[] => {
 		if (!data) return [];
 
 		const status = getStatusFromSignalStrength(data.signal_strength);
+		
+		// Use REAL z-score from backend instead of calculating fake one
+		const realZScore = data.yield_curve_zscore || 0.0;
 		
 		return [
 			{
@@ -65,7 +68,7 @@ export const BondStressIndicators = () => {
 			},
 			{
 				name: 'Spread Z-Score',
-				value: data.yield_curve_zscore,
+				value: realZScore, // REAL z-score from backend
 				status,
 				unit: 'σ'
 			},
@@ -198,7 +201,7 @@ export const BondStressIndicators = () => {
 						<span className="font-medium">Yield Curve:</span> {bondStress?.yield_curve_spread.toFixed(2) || '0'} bps
 					</div>
 					<div>
-						<span className="font-medium">Z-Score:</span> {bondStress?.yield_curve_zscore.toFixed(2) || '0'}σ
+						<span className="font-medium">Z-Score:</span> {bondStress ? bondStress.yield_curve_zscore.toFixed(2) : '0.00'}σ
 					</div>
 				</div>
 				{bondStress?.suggested_action && (

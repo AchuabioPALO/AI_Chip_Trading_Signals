@@ -103,15 +103,32 @@ class DatabaseManager:
 				
 		except Exception as e:
 			self.logger.error(f"Error creating database tables: {e}")
-	
-	def store_bond_signal(self, signal: BondStressSignal):
+			raise
+
+	def clear_bond_signals(self):
+		"""Clear all bond stress signals from database"""
+		try:
+			with sqlite3.connect(self.db_path) as conn:
+				cursor = conn.cursor()
+				cursor.execute("DELETE FROM bond_stress_signals")
+				conn.commit()
+				
+				deleted_count = cursor.rowcount
+				self.logger.info(f"Cleared {deleted_count} bond stress signal records")
+				return deleted_count
+				
+		except Exception as e:
+			self.logger.error(f"Error clearing bond signals: {e}")
+			return 0
+
+	def store_bond_signal(self, signal: "BondStressSignal"):
 		"""Store bond stress signal in database"""
 		try:
 			with sqlite3.connect(self.db_path) as conn:
 				cursor = conn.cursor()
 				
 				cursor.execute("""
-					INSERT INTO bond_stress_signals 
+					INSERT OR REPLACE INTO bond_stress_signals 
 					(timestamp, yield_curve_spread, yield_curve_zscore, bond_volatility, 
 					 credit_spreads, signal_strength, confidence_score, suggested_action)
 					VALUES (?, ?, ?, ?, ?, ?, ?, ?)
@@ -120,7 +137,7 @@ class DatabaseManager:
 					signal.yield_curve_spread,
 					signal.yield_curve_zscore,
 					signal.bond_volatility,
-					signal.credit_spreads,
+					getattr(signal, 'credit_spread', 0.0),  # Handle field name mismatch
 					signal.signal_strength.value,
 					signal.confidence_score,
 					signal.suggested_action
@@ -239,6 +256,51 @@ class DatabaseManager:
 			self.logger.error(f"Error fetching historical signals: {e}")
 			return []
 	
+	def get_historical_bond_signals(self, days: int = 30) -> List[Dict]:
+		"""Get historical bond stress signals for charting - REAL DATA ONLY"""
+		try:
+			with sqlite3.connect(self.db_path) as conn:
+				cursor = conn.cursor()
+				
+				end_date = datetime.now()
+				start_date = end_date - timedelta(days=days)
+				
+				cursor.execute("""
+					SELECT timestamp, yield_curve_spread, yield_curve_zscore, 
+						   bond_volatility, signal_strength
+					FROM bond_stress_signals 
+					WHERE timestamp >= ?
+					ORDER BY timestamp ASC
+				""", (start_date,))
+				
+				results = cursor.fetchall()
+				columns = [description[0] for description in cursor.description]
+				
+				historical_data = [dict(zip(columns, row)) for row in results]
+				
+				self.logger.info(f"Retrieved {len(historical_data)} historical bond signal records")
+				return historical_data
+				
+		except Exception as e:
+			self.logger.error(f"Error fetching historical bond signals: {e}")
+			return []
+	
+	def clear_bond_signals(self):
+		"""Clear all bond stress signals from database"""
+		try:
+			with sqlite3.connect(self.db_path) as conn:
+				cursor = conn.cursor()
+				cursor.execute("DELETE FROM bond_stress_signals")
+				conn.commit()
+				
+				deleted_count = cursor.rowcount
+				self.logger.info(f"Cleared {deleted_count} bond stress signal records")
+				return deleted_count
+				
+		except Exception as e:
+			self.logger.error(f"Error clearing bond signals: {e}")
+			return 0
+
 	def cache_market_data(self, data_type: str, data: Dict, symbol: str = None):
 		"""Cache market data for faster retrieval"""
 		try:

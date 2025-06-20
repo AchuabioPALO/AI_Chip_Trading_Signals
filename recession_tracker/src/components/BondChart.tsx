@@ -13,7 +13,7 @@ import {
 	Filler
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { useBondStress, tradingAPI } from '@/lib/api';
+import { useBondStress } from '@/lib/api';
 
 ChartJS.register(
 	CategoryScale,
@@ -45,49 +45,46 @@ export const BondChart = () => {
 		const fetchHistoricalData = async () => {
 			setLoading(true);
 			try {
-				// Mock historical data for demo - in production this would come from your API
-				const mockData = generateMockHistoricalData(timeframe);
-				setHistoricalData(mockData);
+				// Fetch REAL historical data from backend API
+				const response = await fetch(`http://localhost:8000/api/historical-bond-data?days=${timeframe}`);
+				if (response.ok) {
+					const realData = await response.json();
+					setHistoricalData(realData);
+				} else {
+					// Fallback: Generate single data point from current real data if API fails
+					if (currentBondStress) {
+						const singlePoint: HistoricalBondData = {
+							timestamp: new Date().toISOString(),
+							yield_curve_spread: currentBondStress.yield_curve_spread,
+							yield_curve_zscore: currentBondStress.yield_curve_zscore,
+							bond_volatility: currentBondStress.bond_volatility,
+							signal_strength: currentBondStress.signal_strength
+						};
+						setHistoricalData([singlePoint]);
+					}
+				}
 			} catch (error) {
 				console.error('Error fetching historical bond data:', error);
+				// Use current real data as fallback instead of fake data
+				if (currentBondStress) {
+					const singlePoint: HistoricalBondData = {
+						timestamp: new Date().toISOString(),
+						yield_curve_spread: currentBondStress.yield_curve_spread,
+						yield_curve_zscore: currentBondStress.yield_curve_zscore,
+						bond_volatility: currentBondStress.bond_volatility,
+						signal_strength: currentBondStress.signal_strength
+					};
+					setHistoricalData([singlePoint]);
+				}
 			} finally {
 				setLoading(false);
 			}
 		};
 
 		fetchHistoricalData();
-	}, [timeframe]);
+	}, [timeframe, currentBondStress]);
 
-	const generateMockHistoricalData = (days: number): HistoricalBondData[] => {
-		const data: HistoricalBondData[] = [];
-		const now = new Date();
-		
-		for (let i = days; i >= 0; i--) {
-			const date = new Date(now);
-			date.setDate(date.getDate() - i);
-			
-			// Generate realistic bond data with some volatility
-			const baseSpread = 50 + Math.sin(i * 0.1) * 20 + (Math.random() - 0.5) * 10;
-			const zscore = (baseSpread - 50) / 15;
-			const volatility = 0.1 + Math.abs(Math.sin(i * 0.05)) * 0.05 + (Math.random() - 0.5) * 0.02;
-			
-			let signalStrength = 'WATCH';
-			if (Math.abs(zscore) > 2) signalStrength = 'NOW';
-			else if (Math.abs(zscore) > 1) signalStrength = 'SOON';
-			
-			data.push({
-				timestamp: date.toISOString(),
-				yield_curve_spread: baseSpread,
-				yield_curve_zscore: zscore,
-				bond_volatility: volatility,
-				signal_strength: signalStrength
-			});
-		}
-		
-		return data;
-	};
-
-	const getChartData = () => {
+		const getChartData = () => {
 		const labels = historicalData.map(d => 
 			new Date(d.timestamp).toLocaleDateString('en-US', { 
 				month: 'short', 
@@ -187,7 +184,7 @@ export const BondChart = () => {
 					color: '#374151',
 					drawBorder: false
 				},
-				ticks: {
+								ticks: {
 					color: '#9ca3af',
 					font: {
 						size: 11

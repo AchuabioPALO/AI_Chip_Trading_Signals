@@ -20,7 +20,7 @@ class FredClient:
 		if not self.api_key:
 			self.logger.warning("No FRED API key provided. Get one free at https://fred.stlouisfed.org/docs/api/api_key.html")
 		
-	def get_treasury_yields(self, series_id: str, days_back: int = 252) -> pd.DataFrame:
+	def get_treasury_yields(self, series_id: str, days_back: int = 500) -> pd.DataFrame:
 		"""Fetch treasury yield data from FRED API"""
 		if not self.api_key or self.api_key == "demo_key":
 			self.logger.warning(f"Using mock data for {series_id} - no valid FRED API key")
