@@ -1,0 +1,102 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+.env
+.venv/
+venv/
+ENV/
+env/
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Node.js (for Next.js frontend)
+node_modules/
+.next/
+.vercel/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Development files
+debug_*.py
+test_*.py
+quick_*.py
+working_*.py
+simple_*.py
+*.backup
+launch_*.sh
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Data files (but keep structure)
+backend/data/*.db
+backend/data/*.csv
+backend/data/*.json
+
+# Model files (large ML models)
+models/trained_models/
+models/checkpoints/
+
+# API Keys (already in .env but double protection)
+*api_key*
+*secret*
+*token*
+
+# IDE files
+.idea/
+*.swp
+*.swo
